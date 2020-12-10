@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Book</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="body">
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                                  Form                                   -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div class="formPopup" id="addBookForm">
+      <form class="formSpace">
+        <span id="closeX" class="closeButton">&times;</span>
+        <h1>Add Books</h1>
+        <label for="bookTitle"><b></b></label>
+        <input type="text" placeholder="Title" name="bookTitle" id="bookTitle" required />
+        <label for="author"><b></b></label>
+        <input type="text" placeholder="Author" name="author" id="authorName" required />
+        <button type="button" id="addBookButton" class="button add">Add</button>
+      </form>
+    </div>
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                                 Sidebar                                 -->
+    <!-- ----------------------------------------------------------------------- -->
+    <article id="sidebar">
+      <section id="searchArea">
+        <input id="searchBox" type="text" placeholder="Search" />
+      </section>
+      <button type="button" class="button openForm" id="buttonOpenForm">Add</button>
+      <section id="libraryArea">
+        <h1 id="libraryHeader">Library</h1>
+        <ul id="catsUnderLibrary">
+          <li class="listItem">
+            <img src="/resources/icons/50px/icons8-book-shelf-50.png" />
+            <a href="#">Book Shelf</a>
+          </li>
+          <li class="listItem">
+            <img src="/resources/icons/50px/icons8-open-book-50.png" />
+            <a href="#">Books</a>
+          </li>
+          <li class="listItem">
+            <img src="/resources/icons/50px/icons8-headphones-50.png" />
+            <a href="#">Audiobooks</a>
+          </li>
+          <li class="listItem">
+            <img src="/resources/icons/50px/icons8-spiral-bound-booklet-50.png" />
+            <a href="#">PDFs</a>
+          </li>
+          <li class="listItem">
+            <img src="/resources/icons/50px/icons8-pen-50.png" />
+            <a href="#">Authors</a>
+          </li>
+        </ul>
+      </section>
+      <section id="collections">Collections</section>
+    </article>
+
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                                View Area                                -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div id="viewArea">
+      <div id="booksArea">
+        <table id="bookTable">
+          <thead id="tableHeader">
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+            </tr>
+          </thead>
+          <tbody id="bookTableBody"></tbody>
+        </table>
+        <div class="book">book</div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
