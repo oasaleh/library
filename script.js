@@ -9,7 +9,7 @@ let addButton;
 let addBookButton;
 let closeButton;
 let body;
-let tableHeader
+let tableHeader;
 
 // Where books as objects will be stored.
 let myLibrary = [];
@@ -45,7 +45,6 @@ closeButton.onclick = hideForm;
 
 // Run the function to add the entered text as a book.
 addBookButton.onclick = addBooks;
-// How to run multiple functions in sequence?
 
 /* -------------------------------------------------------------------------- */
 /*                                  Functions                                 */
@@ -56,45 +55,61 @@ function hideForm() {
   addBookForm.style.display = "none";
 }
 
-// Display adding form and blur the background/body.
+// Display adding form.
 function showForm() {
   addBookForm.style.display = "block";
 }
-// When the user clicks anywhere outside of the form popup, close it.
+// Hide adding form when user clicks outside of adding form box.
 window.onclick = function (event) {
   if (event.target == addBookForm) {
     addBookForm.style.display = "none";
   }
 };
 
-// Create a book instance of Book, add it to myLibrary, create HTML element for it and show it.
+// Create a book instance of Book and add it to myLibrary array. Then hide the adding form.
 function addBooks() {
-  const book = new Book();
+  var book = new Book();
   book.title = document.getElementById("bookTitle").value;
   book.author = document.getElementById("authorName").value;
   myLibrary.push(book);
-  addToHTML(book);
-  // populateHTML();
+  hideForm();
   console.table(myLibrary);
+  addToHTML(myLibrary);
 }
 
+// Loop over the new myLibrary array and add new elements/object to the table.
+
 // Update HTML and myLibrary with books.
-function addToHTML(book) {
+function addToHTML(array) {
   // Grab the table body.
   bookTableBody = document.getElementById("bookTableBody");
-  // Create a tr inside the table.
-  let newRow = document.createElement("tr");
-  // Add class book to tr element.
-  newRow.classList.add("book");
-  //Loop over the keys in the object and create td for each.
-  for (key in book) {
-    let newCell = document.createElement("td");
-    newCell.innerHTML = book[key];
-    newRow.appendChild(newCell);
-    // console.log(book[key]);
-  }
+
+  //Loop over the the array myLibrary and create a tr for every object and a td for every title key/value.
+
+  array.forEach((obj) => {
+    // Create a tr inside the table.
+    let bookRow = document.createElement("tr");
+    // Add class book to tr element.
+    bookRow.classList.add("book");
+    // Create a td for every title and for every author.
+    let bookTitle = document.createElement("td");
+    let bookAuthor = document.createElement("td");
+    // Add class bookTitle to tr bookTitle element.
+    bookTitle.classList.add("bookTitle");
+    // Add class bookAuthor to tr bookAuthor element.
+    bookAuthor.classList.add("bookAuthor");
+    // Append the bookTitle under bookRow.
+    bookRow.appendChild(bookTitle);
+    bookRow.appendChild(bookAuthor);
+    // Write the title value into HTML.
+    bookTitle.innerHTML = obj.title;
+    bookAuthor.innerHTML = obj.author;
+    // Append the bookRow under bookTableBody (the table body.)
+    bookTableBody.appendChild(bookRow);
+
+    console.log(`${obj.title} donuts cost $${obj.author} each`);
+  });
   // Append the new row "tr" under table body.
-  bookTableBody.appendChild(newRow);
 }
 
 // Generate a unique ID for each Book.
@@ -128,10 +143,6 @@ class Book {
 /* -------------------------------------------------------------------------- */
 /*                            Logical Checks/Tests                            */
 /* -------------------------------------------------------------------------- */
-
-
-
-
 
 const book1 = new Book("", "Harry Potter", "J.K. Rowling", 600, true);
 const book2 = new Book("", "Lord of the Rings", "Tolkein", 450, true);
