@@ -54,8 +54,7 @@ addBookButton.onclick = addBooks;
 // on Typing start searching
 searchBox.onkeyup = onSearch;
 
-function onSearch (event) {
-
+function onSearch(event) {
   const searchText = searchBox.value.toLowerCase();
   findBooks(myLibrary, searchText);
 }
@@ -65,7 +64,7 @@ function onSearch (event) {
 /* -------------------------------------------------------------------------- */
 // Search function
 function findBooks(array, searchText) {
-  const searchArray = array.filter((obj) => obj.title.toLowerCase().includes(searchText) || obj.author.toLowerCase().includes(searchText))
+  const searchArray = array.filter((obj) => obj.title.toLowerCase().includes(searchText) || obj.author.toLowerCase().includes(searchText));
   addToHTML(searchArray);
   console.log(searchArray);
   console.log(searchText);
@@ -119,7 +118,6 @@ function removeAllChildNodes(parent) {
     parent.removeChild(parent.firstChild);
   }
 }
-
 
 // Loop over the new myLibrary array and add new elements/object to the table.
 
@@ -200,11 +198,10 @@ class Book {
 /* -------------------------------------------------------------------------- */
 
 const book1 = new Book("", "Harry Potter", "J.K. Rowling", 600, true);
-const book2 = new Book("", "Lord of the Rings", "Tolkein", 450, true);
-const book3 = new Book("", "Song of Ice & Fire", "Fatty Boy", 100, false);
+const book2 = new Book("", "Lord of the Rings", "J. R. R. Tolkien", 450, true);
+const book3 = new Book("", "Song of Ice & Fire", "George R. R. Martin", 100, false);
 myLibrary.push(book1);
 myLibrary.push(book2);
 myLibrary.push(book3);
 addToHTML(myLibrary);
 console.table(myLibrary);
-// createBooksElements()
