@@ -160,7 +160,8 @@ function addToHTML(array) {
     bookTableBody.appendChild(bookRow);
 
     const dbLibrary = firebase.database().ref().child("myLibrary");
-    dbLibrary.on();
+    dbLibrary.on("value", (snap) => console.log(snap.val()));
+
     console.log(`${obj.title} donuts cost $${obj.author} each`);
   });
   // Append the new row "tr" under table body.
