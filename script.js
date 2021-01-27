@@ -159,6 +159,8 @@ function addToHTML(array) {
     // Append the bookRow under bookTableBody (the table body.)
     bookTableBody.appendChild(bookRow);
 
+    const dbLibrary = firebase.database().ref().child("myLibrary");
+    dbLibrary.on();
     console.log(`${obj.title} donuts cost $${obj.author} each`);
   });
   // Append the new row "tr" under table body.
