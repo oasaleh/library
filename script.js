@@ -8,8 +8,10 @@ let addForm;
 let addButton;
 let addBookButton;
 let closeButton;
+let deleteButton;
 let body;
 let tableHeader;
+let searchBox;
 
 // Where books as objects will be stored.
 let myLibrary = [];
@@ -33,11 +35,14 @@ closeButton = document.getElementById("closeX");
 // Grab the addBookButton button.
 addBookButton = document.getElementById("addBookButton");
 
+// Grab searchBox
+searchBox = document.getElementById("searchBox");
+
 /* -------------------------------------------------------------------------- */
 /*                           Buttons Functionalities                          */
 /* -------------------------------------------------------------------------- */
 
-// Show the book form popup.
+// Show book form popup.
 addButton.onclick = showForm;
 
 // Hide book form popup.
@@ -46,12 +51,39 @@ closeButton.onclick = hideForm;
 // Run the function to add the entered text as a book.
 addBookButton.onclick = addBooks;
 
+// on Typing start searching
+searchBox.onkeyup = onSearch;
+
+function onSearch (event) {
+
+  const searchText = searchBox.value.toLowerCase();
+  findBooks(myLibrary, searchText);
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                  Functions                                 */
 /* -------------------------------------------------------------------------- */
+// Search function
+function findBooks(array, searchText) {
+  const searchArray = array.filter((obj) => obj.title.toLowerCase().includes(searchText) || obj.author.toLowerCase().includes(searchText))
+  addToHTML(searchArray);
+  console.log(searchArray);
+  console.log(searchText);
+}
+
+// Delete book.
+function removeBook(array, uuid) {
+  const index = array.findIndex((obj) => obj.id == uuid);
+  array.splice(index, 1);
+  addToHTML(array);
+}
 
 // Hide adding form.
 function hideForm() {
+  document.getElementById("bookTitle").value = "";
+  document.getElementById("authorName").value = "";
+  document.getElementById("bookTitle").placeholder = "Title";
+  document.getElementById("authorName").placeholder = "Author";
   addBookForm.style.display = "none";
 }
 
@@ -62,20 +94,32 @@ function showForm() {
 // Hide adding form when user clicks outside of adding form box.
 window.onclick = function (event) {
   if (event.target == addBookForm) {
-    addBookForm.style.display = "none";
+    hideForm();
   }
 };
 
 // Create a book instance of Book and add it to myLibrary array. Then hide the adding form.
 function addBooks() {
-  var book = new Book();
-  book.title = document.getElementById("bookTitle").value;
-  book.author = document.getElementById("authorName").value;
-  myLibrary.push(book);
-  hideForm();
-  console.table(myLibrary);
-  addToHTML(myLibrary);
+  if (document.getElementById("bookTitle").value == "" || document.getElementById("authorName").value == "") {
+    document.getElementById("bookTitle").placeholder = "Required field!";
+    document.getElementById("authorName").placeholder = "Required field!";
+  } else {
+    var book = new Book();
+    book.title = document.getElementById("bookTitle").value;
+    book.author = document.getElementById("authorName").value;
+    myLibrary.push(book);
+    addToHTML(myLibrary);
+    hideForm();
+  }
 }
+
+// Remove all children (books) inside the table.
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
 
 // Loop over the new myLibrary array and add new elements/object to the table.
 
@@ -83,7 +127,8 @@ function addBooks() {
 function addToHTML(array) {
   // Grab the table body.
   bookTableBody = document.getElementById("bookTableBody");
-
+  // Remove all books inside the table.
+  removeAllChildNodes(bookTableBody);
   //Loop over the the array myLibrary and create a tr for every object and a td for every title key/value.
 
   array.forEach((obj) => {
@@ -94,16 +139,25 @@ function addToHTML(array) {
     // Create a td for every title and for every author.
     let bookTitle = document.createElement("td");
     let bookAuthor = document.createElement("td");
+    let deleteButton = document.createElement("button");
     // Add class bookTitle to tr bookTitle element.
     bookTitle.classList.add("bookTitle");
     // Add class bookAuthor to tr bookAuthor element.
     bookAuthor.classList.add("bookAuthor");
+    // Add class deleteButton to tr deleteButton element.
+    deleteButton.classList.add("deleteButton");
+    deleteButton.setAttribute("id", obj.id);
+    deleteButton.onclick = function () {
+      removeBook(myLibrary, obj.id);
+    };
     // Append the bookTitle under bookRow.
     bookRow.appendChild(bookTitle);
     bookRow.appendChild(bookAuthor);
+    bookRow.appendChild(deleteButton);
     // Write the title value into HTML.
     bookTitle.innerHTML = obj.title;
     bookAuthor.innerHTML = obj.author;
+    deleteButton.innerHTML = "&times;";
     // Append the bookRow under bookTableBody (the table body.)
     bookTableBody.appendChild(bookRow);
 
@@ -132,6 +186,7 @@ class Book {
     this.id = uuid();
     this.title = title;
     this.author = author;
+    this.read = false;
     // this.pages = pages;
     // this.isRead = true;
     // this.info = function () {
@@ -150,6 +205,6 @@ const book3 = new Book("", "Song of Ice & Fire", "Fatty Boy", 100, false);
 myLibrary.push(book1);
 myLibrary.push(book2);
 myLibrary.push(book3);
-
+addToHTML(myLibrary);
 console.table(myLibrary);
 // createBooksElements()

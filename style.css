@@ -62,6 +62,12 @@ body {
   outline: none;
 }
 
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
 /* ----------------------------- Library Section ---------------------------- */
 
 /* Library Section Header Title */
@@ -190,6 +196,12 @@ td {
   border-radius: 4px;
   max-width: 300px;
   height: 450px;
+}
+#bookTitle {
+  margin-top: 15px;
+}
+#bookTitle {
+  margin-bottom: 5px;
 }
 .closeButton {
   color: #aaaaaa;
