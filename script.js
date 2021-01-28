@@ -12,9 +12,46 @@ let deleteButton;
 let body;
 let tableHeader;
 let searchBox;
+let myLibrary;
+
+if (localStorage.getItem("myLibrary")) {
+  myLibrary = [];
+  let savedLibrary = localStorage.getItem("myLibrary");
+  myLibrary = JSON.parse(savedLibrary);
+} else {
+  myLibrary = [];
+}
+  
 
 // Where books as objects will be stored.
-let myLibrary = [];
+// const dbLibrary = firebase.database().ref().child("myLibrary");
+// dbLibrary.on("value", (snap) => console.log(snap.val()));
+
+// let firestore = firebase.firestore();
+
+// let docRef = firestore.doc("userBooks/library");
+// saveLibrary = function () {
+//   docRef
+//     .set({
+//       userLibrary: myLibrary,
+//     })
+//     .then(function () {
+//       console.log("Library saved!");
+//     })
+//     .catch(function (error) {
+//       console.log("Got an error: ", error);
+//     });
+// };
+// saveLibrary();
+// getUpdate = function () {
+//   docRef.onSnapshot(function (doc) {
+//     if (doc && doc.exists) {
+//       const myData = doc.data();
+//       myLibrary = myData.userLibrary;
+//       console.log(myData.userLibrary);
+//     }
+//   });
+// };
 
 /* -------------------------------------------------------------------------- */
 /*                          Grabbing Items from HTML                          */
@@ -66,14 +103,13 @@ function onSearch(event) {
 function findBooks(array, searchText) {
   const searchArray = array.filter((obj) => obj.title.toLowerCase().includes(searchText) || obj.author.toLowerCase().includes(searchText));
   addToHTML(searchArray);
-  console.log(searchArray);
-  console.log(searchText);
 }
 
 // Delete book.
 function removeBook(array, uuid) {
   const index = array.findIndex((obj) => obj.id == uuid);
   array.splice(index, 1);
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
   addToHTML(array);
 }
 
@@ -107,6 +143,7 @@ function addBooks() {
     book.title = document.getElementById("bookTitle").value;
     book.author = document.getElementById("authorName").value;
     myLibrary.push(book);
+    localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
     addToHTML(myLibrary);
     hideForm();
   }
@@ -158,13 +195,12 @@ function addToHTML(array) {
     deleteButton.innerHTML = "&times;";
     // Append the bookRow under bookTableBody (the table body.)
     bookTableBody.appendChild(bookRow);
+    // saveLibrary();
+    // getUpdate();
 
-    const dbLibrary = firebase.database().ref().child("myLibrary");
-    dbLibrary.on("value", (snap) => console.log(snap.val()));
-
-    console.log(`${obj.title} donuts cost $${obj.author} each`);
+    
   });
-  // Append the new row "tr" under table body.
+  console.table(myLibrary);
 }
 
 // Generate a unique ID for each Book.
@@ -200,11 +236,11 @@ class Book {
 /*                            Logical Checks/Tests                            */
 /* -------------------------------------------------------------------------- */
 
-const book1 = new Book("", "Harry Potter", "J.K. Rowling", 600, true);
-const book2 = new Book("", "Lord of the Rings", "J. R. R. Tolkien", 450, true);
-const book3 = new Book("", "Song of Ice & Fire", "George R. R. Martin", 100, false);
-myLibrary.push(book1);
-myLibrary.push(book2);
-myLibrary.push(book3);
+// const book1 = new Book("", "Harry Potter", "J.K. Rowling", 600, true);
+// const book2 = new Book("", "Lord of the Rings", "J. R. R. Tolkien", 450, true);
+// const book3 = new Book("", "Song of Ice & Fire", "George R. R. Martin", 100, false);
+// myLibrary.push(book1);
+// myLibrary.push(book2);
+// myLibrary.push(book3);
 addToHTML(myLibrary);
-console.table(myLibrary);
+
