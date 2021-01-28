@@ -1,6 +1,7 @@
 * {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue";
 }
 body {
   background-color: #ffffff;
@@ -164,7 +165,7 @@ td {
 }
 #bookTitle {
   margin-top: 15px;
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 .closeButton {
   color: #aaaaaa;
