@@ -2,7 +2,6 @@
 /*                               Initialization                               */
 /* -------------------------------------------------------------------------- */
 let myLibrary;
-
 if (localStorage.getItem('myLibrary')) {
   myLibrary = [];
   const savedLibrary = localStorage.getItem('myLibrary');
@@ -10,13 +9,10 @@ if (localStorage.getItem('myLibrary')) {
 } else {
   myLibrary = [];
 }
-
 // Where books as objects will be stored.
 // const dbLibrary = firebase.database().ref().child("myLibrary");
 // dbLibrary.on("value", (snap) => console.log(snap.val()));
-
 // let firestore = firebase.firestore();
-
 // let docRef = firestore.doc("userBooks/library");
 // saveLibrary = function () {
 //   docRef
@@ -40,46 +36,47 @@ if (localStorage.getItem('myLibrary')) {
 //     }
 //   });
 // };
-
 /* -------------------------------------------------------------------------- */
 /*                          Grabbing Items from HTML                          */
 /* -------------------------------------------------------------------------- */
+// Grab the add form.
+const addBookForm = Document.getElementById('addBookForm');
 // Grab the Open/Add button.
 const addButton = document.getElementById('buttonOpenForm');
-
+// Grab the table body.
+const bookTableBody = document.getElementById('bookTableBody');
 // Grab the close button.
 const closeButton = document.getElementById('closeX');
-
 // Grab the addBookButton button.
 const addBookButton = document.getElementById('addBookButton');
-
 // Grab searchBox
 const searchBox = document.getElementById('searchBox');
-
-/* -------------------------------------------------------------------------- */
-/*                           Buttons Functionalities                          */
-/* -------------------------------------------------------------------------- */
-
-// Show book form popup.
-addButton.onclick = showForm;
-
-// Hide book form popup.
-closeButton.onclick = hideForm;
-
-// Run the function to add the entered text as a book.
-addBookButton.onclick = addBooks;
-
-// on Typing start searching
-searchBox.onkeyup = onSearch;
-
-function onSearch() {
-  const searchText = searchBox.value.toLowerCase();
-  findBooks(myLibrary, searchText);
-}
-
 /* -------------------------------------------------------------------------- */
 /*                                  Functions                                 */
 /* -------------------------------------------------------------------------- */
+// Generate a unique ID for each Book.
+function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+// Function constructor to create instances of Book.
+class Book {
+  constructor(id, title, author, pages, isRead) {
+    this.id = uuid();
+    this.title = title;
+    this.author = author;
+    this.read = false;
+    // this.pages = pages;
+    // this.isRead = true;
+    // this.info = function () {
+    //   return `${book.title} by ${book.author}, ${book.pages} pages, ${book.isRead}.`;
+    // };
+  }
+}
+
 // Search function
 function findBooks(array, searchText) {
   const searchArray = array.filter(
@@ -90,13 +87,18 @@ function findBooks(array, searchText) {
 }
 
 // Delete book.
-function removeBook(array, uuid) {
-  const index = array.findIndex((obj) => obj.id == uuid);
+function removeBook(array, id) {
+  const index = array.findIndex((obj) => obj.id === id);
   array.splice(index, 1);
   localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
   addToHTML(array);
 }
-
+// Convert text in searchbox into lower case and pass it into findBooks function
+// along with myLibrary.
+function onSearch() {
+  const searchText = searchBox.value.toLowerCase();
+  findBooks(myLibrary, searchText);
+}
 // Hide adding form.
 function hideForm() {
   document.getElementById('bookTitle').value = '';
@@ -112,7 +114,7 @@ function showForm() {
 }
 // Hide adding form when user clicks outside of adding form box.
 window.onclick = function (event) {
-  if (event.target == addBookForm) {
+  if (event.target === addBookForm) {
     hideForm();
   }
 };
@@ -144,16 +146,12 @@ function removeAllChildNodes(parent) {
 }
 
 // Loop over the new myLibrary array and add new elements/object to the table.
-
 // Update HTML and myLibrary with books.
 function addToHTML(array) {
-  // Grab the table body.
-  const bookTableBody = document.getElementById('bookTableBody');
   // Remove all books inside the table.
   removeAllChildNodes(bookTableBody);
-  // Loop over the the array myLibrary and create a tr for every object and a 
+  // Loop over the the array myLibrary and create a tr for every object and a
   // td for every title key/value.
-
   array.forEach((obj) => {
     // Create a tr inside the table.
     const bookRow = document.createElement('tr');
@@ -186,46 +184,20 @@ function addToHTML(array) {
     // saveLibrary();
     // getUpdate();
   });
-  console.table(myLibrary);
 }
-
-// Generate a unique ID for each Book.
-function uuid() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c == 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
-
-// Populate HTML element with book information.
-function populateHTML() {
-  // newBook.innerHTML = book.info()
-}
-
-// Function constructor to create instances of Book.
-class Book {
-  constructor(id, title, author, pages, isRead) {
-    this.id = uuid();
-    this.title = title;
-    this.author = author;
-    this.read = false;
-    // this.pages = pages;
-    // this.isRead = true;
-    // this.info = function () {
-    //   return `${book.title} by ${book.author}, ${book.pages} pages, ${book.isRead}.`;
-    // };
-  }
-}
-
 /* -------------------------------------------------------------------------- */
-/*                            Logical Checks/Tests                            */
+/*                           Buttons Functionalities                          */
 /* -------------------------------------------------------------------------- */
+// Show book form popup.
+addButton.onclick = showForm;
 
-// const book1 = new Book("", "Harry Potter", "J.K. Rowling", 600, true);
-// const book2 = new Book("", "Lord of the Rings", "J. R. R. Tolkien", 450, true);
-// const book3 = new Book("", "Song of Ice & Fire", "George R. R. Martin", 100, false);
-// myLibrary.push(book1);
-// myLibrary.push(book2);
-// myLibrary.push(book3);
+// Hide book form popup.
+closeButton.onclick = hideForm;
+
+// Run the function to add the entered text as a book.
+addBookButton.onclick = addBooks;
+
+// on Typing start searching
+searchBox.onkeyup = onSearch;
+
 addToHTML(myLibrary);
