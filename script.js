@@ -40,7 +40,7 @@ if (localStorage.getItem('myLibrary')) {
 /*                          Grabbing Items from HTML                          */
 /* -------------------------------------------------------------------------- */
 // Grab the add form.
-const addBookForm = Document.getElementById('addBookForm');
+const addBookForm = document.getElementById('addBookForm');
 // Grab the Open/Add button.
 const addButton = document.getElementById('buttonOpenForm');
 // Grab the table body.
